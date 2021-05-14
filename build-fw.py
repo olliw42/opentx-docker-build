@@ -11,7 +11,7 @@ from fwoptions import *
 
 # Show a header
 print("")
-print("The script to build opentx firmware with docker image  vitass/opentx-fw--build")
+print("The script to build opentx firmware with docker image olliw/opentx-fw-build")
 print("")
 
 # Specify some paths for the build
@@ -203,7 +203,7 @@ os.chdir(build_dir)
 print("")
 print ("Copying source from /opentx to /tmp/opentx ...")
 print("")
-shutil.copytree("/opentx", "/tmp/opentx")
+shutil.copytree("/opentx", "/tmp/opentx", ignore=shutil.ignore_patterns(".git"))
 
 # Prepare the cmake command
 cmd = ["cmake"]
@@ -240,7 +240,7 @@ proc = subprocess.Popen(["make", "clean"])
 proc.wait()
 
 # Launch make with two threads
-proc = subprocess.Popen(["make", "-j2", "firmware"])
+proc = subprocess.Popen(["make", "-j4", "firmware"])
 proc.wait()
 
 # Exit if make errored

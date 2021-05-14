@@ -1,3 +1,40 @@
+# EdgeTx and OpenTx docker, 2.4 versions
+
+That's my modifications to the great vitas docker file for compiling OpenTx. For the original credantials please scroll to the below.
+
+This branch has the docker for compiling the 2.4 versions of EdgeTx or OpenTx.
+
+Usage:
+
+- Clone or fork this repo and checkout this branch here. 
+
+- Then one needs to build a local docker image. 
+
+I'm on Win7 and am using the DockerToolbox. In the box, I did it with
+
+cd "/c/Users/Olli/Documents/GitHub/opentx-docker-build/"
+docker build -f Dockerfile -t my_otx24 .
+cd "/c/Program Files/Docker Toolbox"
+
+
+Note: SECURITY WARNINGS, if they occur, can be just ignored.
+
+Note: The docker can be used for both OpenTx and EdgeTx, see below.
+
+- For compiling OpenTx2.4 for a Jumper T16 radio, I enter in the box
+
+docker run --rm -it -e "BOARD_NAME=t16" -v "/c/Users/Olli/Documents/GitHub/opentx:/opentx" -e "CMAKE_FLAGS=LUA=YES INTERNAL_MODULE_MULTI=YES PPM_UNIT=US MODULE_PROTOCOL_FLEX=YES" my_otx24
+
+- For compiling EdgeTx2.4 for a Jumper T16 radio, I enter in the box
+
+docker run --rm -it -e "BOARD_NAME=t16" -v "/c/Users/Olli/Documents/GitHub/edgetx:/opentx" -e "CMAKE_FLAGS=LUA=YES INTERNAL_MODULE_MULTI=YES PPM_UNIT=US MODULE_PROTOCOL_FLEX=YES" my_otx24
+
+Note: The difference is in the folder!
+
+
+
+
+
 # opentx-docker-build
 
 A Docker container for building firmware [OpenTX](https://github.com/opentx/opentx), 
