@@ -13,7 +13,7 @@ firmware = "edgetx"
 
 # Show a header
 print("")
-print("Script to build "+firmware+" firmware with docker image olliw/opentx-fw-build/edgetx")
+print("Script to build "+firmware+" firmware with docker image olliw/opentx-fw-build/"+firmware)
 print("")
 
 proc = subprocess.Popen(["arm-none-eabi-gcc", "--version"])
