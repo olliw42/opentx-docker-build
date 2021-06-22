@@ -9,16 +9,21 @@ import time
 from collections import OrderedDict
 from fwoptions import *
 
+firmware = "opentx"
+
 # Show a header
 print("")
-print("The script to build opentx firmware with docker image  vitass/opentx-fw--build")
+print("Script to build "+firmware+" firmware with docker image olliw/opentx-fw-build/edgetx")
 print("")
+
+proc = subprocess.Popen(["arm-none-eabi-gcc", "--version"])
+proc.wait()
 
 # Specify some paths for the build
 build_dir = "/build"
-source_dir = "/tmp/opentx"
-output_dir = "/opentx"
-output_filename = "opentx"
+source_dir = "/tmp/"+firmware
+output_dir = "/"+firmware
+output_filename = firmware
 output_extension = ".bin"
 
 # Maximum size for the compiled firmware
@@ -43,8 +48,8 @@ generic_default_options = OrderedDict([
 available_languages = ("EN", "FR", "SE", "IT", "CZ", "DE", "PT", "ES", "PL", "NL")
 
 # Check that the source is valid
-if not os.path.exists("/opentx/CMakeLists.txt"):
-    print("ERROR: OpenTX source not found in /opentx. Did you specifiy a valid mount?")
+if not os.path.exists("/"+firmware+"/CMakeLists.txt"):
+    print("ERROR: "+firmware+" source not found in /"+firmware+". Did you specifiy a valid mount?")
     print("")
     exit(5)
 
@@ -201,9 +206,15 @@ os.chdir(build_dir)
 
 # Copy the source tree to the temporary folder - makes build 3x faster than building against the mount on Windows
 print("")
-print ("Copying source from /opentx to /tmp/opentx ...")
+print ("Copying source from "+output_dir+" to "+source_dir+" ...")
 print("")
-shutil.copytree("/opentx", "/tmp/opentx")
+shutil.copytree(output_dir, source_dir, ignore=shutil.ignore_patterns(".git"))
+# since we have not copied the .git folder, as this saves lots of time, cmake cannot determine GIT_STR.
+# We thus fake it by copying over what is needed, and making it a valid git repo.
+shutil.copytree(output_dir+"/.git/refs/heads", source_dir+"/.git/refs/heads")
+shutil.copyfile(output_dir+"/.git/HEAD", source_dir+"/.git/HEAD")
+proc = subprocess.Popen(["git", "init", source_dir])
+proc.wait()
 
 # Prepare the cmake command
 cmd = ["cmake"]
@@ -240,7 +251,7 @@ proc = subprocess.Popen(["make", "clean"])
 proc.wait()
 
 # Launch make with two threads
-proc = subprocess.Popen(["make", "-j2", "firmware"])
+proc = subprocess.Popen(["make", "-j4", "firmware"])
 proc.wait()
 
 # Exit if make errored

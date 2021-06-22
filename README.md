@@ -1,3 +1,19 @@
+# EdgeTx and OpenTx Docker
+
+This are my modifications to the great [vitas docker file](https://github.com/vitas/opentx-docker-build) for compiling OpenTx; for the original credantials please scroll to the below.
+
+This repo has docker files for compiling OpenTx 2.3.x and EdgeTx 2.4.x versions, as well as some usefull helper scripts to simplify things.
+
+For instructions got to
+
+- OpenTx 2.3: [opentx](opentx/)
+
+- EdgeTx 2.4: [edgetx](edgetx/)
+
+
+------------------
+Original Credentials:
+
 # opentx-docker-build
 
 A Docker container for building firmware [OpenTX](https://github.com/opentx/opentx), 
